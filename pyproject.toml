@@ -7,6 +7,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+pytube = "^15.0.0"
+python-decouple = "^3.8"
+youtube-transcript-api = "^0.6.2"
+tqdm = "^4.66.2"
 
 
 [build-system]
