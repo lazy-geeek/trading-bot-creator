@@ -165,3 +165,4 @@ transcripts/
 tokens/
 client_secret.json
 client_secret.json:Zone.Identifier
+*.env

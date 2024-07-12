@@ -1,0 +1,7 @@
+# TODO   Get summary from transcripts
+
+
+# TODO   Run youtube transcription as standalone service
+# TODO   Save files in ftp path
+
+# TODO   Quant Strategies from MoonDev Discord Group
