@@ -33,6 +33,8 @@ def get_playlist_transcripts(playlist_url):
         playlist.videos, desc="Downloading transcripts", total=len(playlist.videos)
     ):
 
+        # TODO Check if video still does exist. If not remove from playlist
+
         text = ""
         text = get_video_transcript(video.video_id)
         if text is not None:
@@ -46,6 +48,7 @@ def get_playlist_transcripts(playlist_url):
 
 
 def all_videos_from_playlist(playlist_id):
+    youtube = None
     videos = []
     next_page_token = None
 

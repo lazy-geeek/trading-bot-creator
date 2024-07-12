@@ -46,38 +46,38 @@ def save_texts_to_file(texts, foldername):
         save_text_to_file(text["text"], text["name"], foldername)
 
 
-"""
+def get_texts_from_folder(foldername):
 
-def move_existing_files_to_timestamp_archive(foldername):
-    # if path contains files, move them to archive folder
-    path = pathlib.Path.cwd() / f'{foldername}/'
-    if not os.path.exists(path):
-        os.makedirs(path)
-    files = os.listdir(path)
-    if files:
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        os.makedirs(path / timestamp, exist_ok=True)        
-        for file in tqdm(files, desc="Moving files to archive", total=len(files)):
-            os.rename(path / file, path / timestamp / file)            
+    texts = []
 
-def save_text_to_file(text,filename,foldername):
-    path = pathlib.Path.cwd() / f'{foldername}/'
-    if not os.path.exists(path):
-        os.makedirs(path)
-    filename = secure_filename(filename)    
-    file_path = path / f'{filename}.txt'
-    with open(file_path, 'w') as f:
-        f.write(text)
-        
+    ftp.cwd(foldername)
 
+    filenames = ftp.nlst()
+    filenames = filenames[:5]
 
-def get_text_from_file(foldername):
-    path = pathlib.Path.cwd() / f'{foldername}/'
-    #Get first txt file from folder and return its content
-    files = [f for f in os.listdir(path) if f.endswith(".txt")]
-    if files:
-        with open(path / files[0], 'r') as f:
-            return f.read()
-            
+    # open all files with ending .txt in folder
 
-"""
+    for filename in tqdm(
+        filenames, desc="Reading files from FTP", total=len(filenames)
+    ):
+        if filename.endswith(".txt"):
+            bio = BytesIO()
+            ftp.retrbinary(f"RETR {filename}", bio.write)
+            bio.seek(0)
+            text = {}
+            text["name"] = filename.replace(".txt", "")
+            text["text"] = bio.getvalue().decode("utf-8")
+            texts.append(text)
+
+    if texts:
+        return texts
+    else:
+        return None
+
+    # open file with ftplib
+
+    # read file
+
+    # save file
+
+    # close file
