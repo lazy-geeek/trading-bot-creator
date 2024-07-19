@@ -6,4 +6,5 @@ from ftp_mgt import save_texts_to_file
 foldername = "transcripts"
 
 transcripts = get_playlist_transcripts(playlist_url=config("yt_source_pl_url"))
+print(len(transcripts))
 save_texts_to_file(texts=transcripts, foldername=foldername)

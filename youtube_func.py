@@ -19,6 +19,7 @@ def get_video_transcript(video_id):
         transcript = transcript_list.find_transcript(["en", "de"])
         return " ".join([t["text"] for t in transcript.fetch()])
     except Exception as e:
+        print(e)
         return None
 
 
