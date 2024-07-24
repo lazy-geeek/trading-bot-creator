@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 try:
 
     # Step 1: Connect to the FTP server
-    ftp = FTP(config("ftp_url"))
+    ftp = FTP(config("ftp_url"), timeout=1200)
 
     # Step 2: Login to the FTP server
     ftp.login(user=config("ftp_user"), passwd=config("ftp_pass"))
@@ -22,6 +22,10 @@ except Exception as e:
 def save_text_to_file(text, filename, foldername):
     try:
         # current ftp foldername
+
+        foldername = secure_filename(foldername)
+
+        ftp.cwd("/")
 
         if ftp.pwd() == "/":
             if not foldername in ftp.nlst():
@@ -50,10 +54,11 @@ def get_texts_from_folder(foldername):
 
     texts = []
 
+    ftp.cwd("/")
     ftp.cwd(foldername)
 
     filenames = ftp.nlst()
-    filenames = filenames[:5]
+    filenames = filenames[:17]
 
     # open all files with ending .txt in folder
 
