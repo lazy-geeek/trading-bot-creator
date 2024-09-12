@@ -18,6 +18,7 @@ google-api-python-client = "^2.125.0"
 google-auth-oauthlib = "^1.2.0"
 discord = "^2.3.2"
 ollama = "^0.3.0"
+tiktoken = "^0.7.0"
 
 
 [build-system]

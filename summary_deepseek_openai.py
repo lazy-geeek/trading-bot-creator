@@ -1,14 +1,15 @@
 from ftp_mgt import get_texts_from_folder, save_text_to_file
-import ollama
+from openai import OpenAI, OpenAIError
 from tqdm import tqdm
 
+# from ollama import Ollama, OllamaError
 from decouple import config
 import time
 from openai_instructions import summary_system_content, summary_user_content
 
 foldername = "transcripts"
 
-client = ollama.Client()
+client = OpenAI(api_key=config("deepseek_api_key"), base_url=config("deepseek_url"))
 
 
 def summarize_transcripts(model):
@@ -20,9 +21,12 @@ def summarize_transcripts(model):
         transcript = text["text"]
         tqdm.write("*****************************************************")
         tqdm.write(text["name"])
+        # Send transcript to openai compatible llm and revceive summary
+
+        # TODO Compress the tokens
 
         try:
-            response = ollama.chat(
+            response = client.chat.completions.create(
                 model=model,
                 messages=[
                     {"role": "system", "content": summary_system_content},
@@ -31,17 +35,16 @@ def summarize_transcripts(model):
                         "content": summary_user_content.format(transcript=transcript),
                     },
                 ],
-                options=ollama.Options(num_ctx=38_000),
             )
 
-        except ollama.ResponseError as e:
-            tqdm.write(f"ollama API error: {e}")
+        except OpenAIError as e:
+            tqdm.write(f"OpenAI API error: {e}")
 
         except Exception as e:
             tqdm.write(f"Error: {e}")
             continue
 
-        message = response["message"]["content"]
+        message = response.choices[0].message.content
 
         tqdm.write(message)
         tqdm.write("\n*****************************************************")
